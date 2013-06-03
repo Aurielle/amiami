@@ -1,0 +1,23 @@
+<table width="100%" class="figurky">
+	<tbody n:inner-foreach="$figures as $f">
+		<tr>
+			<td>
+				<a href="{$imagePrefix}{$f->image_basename}" rel="fancybox" class="hoverZoomLink">
+					<img src="{$imagePrefix}{$f->image_thumb}" alt="" width="150" height="150" class="alignnone size-thumbnail hoverZoomLink">
+				</a>
+			</td>
+			<td>
+				<h3><strong>{$f->name}</strong></h3>
+				<p>
+					<strong>Postava:</strong> {$f->character}<br>
+					<strong>Výrobce:</strong> {$f->manufacturer}<br>
+					<strong>V prodeji:</strong> {$f->releasedate}<br>
+					<strong>Doporučená cena / cena na internetu:</strong> {$f->price} jenů / {$f->internetprice} jenů
+				</p>
+				<p>
+					<a href="{$f->link}">AmiAmi link</a>
+				</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
