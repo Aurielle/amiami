@@ -88,7 +88,7 @@ foreach ($urls as $url) {
 	}
 
 	$figure['manufacturer'] = trim(pq('dl.spec_data')->find('dt:contains(Maker)')->next('dd')->text());
-	$figure['link'] = $urljp;
+	$figure['link'] = $urlcom;
 
 	$releasedate = trim(pq('dl.spec_data')->find('dt:contains(Release Date)')->next('dd')->text());
 	$releasedate = substr($releasedate, strpos($releasedate, ' '));
