@@ -29,7 +29,7 @@ $urls = explode("\n", $c);
 $info = array();
 
 foreach ($urls as $url) {
-	$query = parse_url($url, PHP_URL_QUERY);
+	$query = parse_url(trim($url), PHP_URL_QUERY);
 	$parts = array();
 	parse_str($query, $parts);
 
@@ -47,6 +47,7 @@ foreach ($urls as $url) {
 	$urljp = "http://www.amiami.jp/top/detail/detail?gcode={$figId}&page=top";
 	try {
 		$ch = new Kdyby\Curl\Request($urlcom);
+		$ch->setTimeout(60);
 		$response = $ch->send();
 		$dom = \phpQuery::newDocument($response->getResponse());
 
@@ -63,6 +64,7 @@ foreach ($urls as $url) {
 	try {
 		$fh = fopen('safe://' . $imgDir . '/' . $filename, 'wb');
 		$ch = new Kdyby\Curl\Request($figure['image']);
+		$ch->setTimeout(60);
 		$res = $ch->send();
 		fwrite($fh, $res->getResponse());
 		fclose($fh);
@@ -95,6 +97,7 @@ foreach ($urls as $url) {
 	// Now the prices from jp version
 	try {
 		$ch = new Kdyby\Curl\Request($urljp);
+		$ch->setTimeout(60);
 		$response = $ch->send();
 		$dom = \phpQuery::newDocument($response->getResponse());
 
