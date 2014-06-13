@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2143e543974311041482b4879546bc19",
+    "hash": "272385666a8d22ca9209c07ebd45e9ca",
     "packages": [
         {
             "name": "electrolinux/phpquery",
@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/electrolinux/phpquery.git",
-                "reference": "0.9.6"
+                "reference": "3bdceb900a7406b4de0523947fc29673ec9cb310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/electrolinux/phpquery/zipball/0.9.6",
-                "reference": "0.9.6",
+                "url": "https://api.github.com/repos/electrolinux/phpquery/zipball/3bdceb900a7406b4de0523947fc29673ec9cb310",
+                "reference": "3bdceb900a7406b4de0523947fc29673ec9cb310",
                 "shasum": ""
             },
             "type": "library",
@@ -43,25 +43,25 @@
             ],
             "description": "phpQuery is a server-side, chainable, CSS3 selector driven Document Object Model (DOM) API based on jQuery JavaScript Library",
             "homepage": "http://code.google.com/p/phpquery/",
-            "time": "2013-03-21 12:39:33"
+            "time": "2013-10-12 07:09:33"
         },
         {
             "name": "kdyby/curl",
-            "version": "v1.0.3",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/Curl.git",
-                "reference": "v1.0.3"
+                "reference": "6a0f6f9ace91ded2044776a7e5d97371a6d191a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Curl/zipball/v1.0.3",
-                "reference": "v1.0.3",
+                "url": "https://api.github.com/repos/Kdyby/Curl/zipball/6a0f6f9ace91ded2044776a7e5d97371a6d191a6",
+                "reference": "6a0f6f9ace91ded2044776a7e5d97371a6d191a6",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "nette/nette": ">=2.0,<3.0"
+                "nette/nette": "~2.1@dev"
             },
             "require-dev": {
                 "nette/tester": "@dev"
@@ -84,6 +84,7 @@
             "authors": [
                 {
                     "name": "Filip Procházka",
+                    "email": "filip@prochazka.su",
                     "homepage": "http://filip-prochazka.com"
                 }
             ],
@@ -94,46 +95,43 @@
                 "http",
                 "nette"
             ],
-            "time": "2013-04-03 08:42:59"
+            "time": "2014-01-08 12:16:14"
         },
         {
             "name": "nette/nette",
-            "version": "v2.0.10",
+            "version": "v2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/nette.git",
-                "reference": "v2.0.10"
+                "reference": "a862bf4cb9a53e7c13c0d4f0b2394b9a2097d604"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/nette/zipball/v2.0.10",
-                "reference": "v2.0.10",
+                "url": "https://api.github.com/repos/nette/nette/zipball/a862bf4cb9a53e7c13c0d4f0b2394b9a2097d604",
+                "reference": "a862bf4cb9a53e7c13c0d4f0b2394b9a2097d604",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "ext-tokenizer": "*",
-                "php": ">=5.3.0"
+                "php": ">=5.3.1"
             },
             "require-dev": {
-                "nette/tester": "@dev"
+                "nette/tester": "~1.1"
             },
             "suggest": {
-                "ext-fileinfo": "*",
-                "ext-gd": "*",
-                "ext-mbstring": "*",
-                "ext-memcache": "*",
-                "ext-pdo": "*"
+                "ext-fileinfo": "",
+                "ext-gd": "",
+                "ext-mbstring": "",
+                "ext-pdo": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
             "autoload": {
+                "classmap": [
+                    "Nette/"
+                ],
                 "files": [
-                    "Nette/loader.php"
+                    "Nette/common/shortcuts.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -157,18 +155,13 @@
             "keywords": [
                 "Forms",
                 "database",
-                "dbal",
                 "debugging",
                 "framework",
-                "images",
-                "latte",
                 "mailing",
-                "micro",
                 "mvc",
-                "neon",
                 "templating"
             ],
-            "time": "2013-03-08 15:44:35"
+            "time": "2014-05-24 20:35:49"
         }
     ],
     "packages-dev": [

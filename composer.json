@@ -12,8 +12,8 @@
 	],
 	"require": {
 		"php": ">=5.3.2",
-		"nette/nette": "2.0.*",
-		"electrolinux/phpquery": "dev-master",
-		"kdyby/curl": "1.0.*"
+		"nette/nette": "2.1.*",
+		"electrolinux/phpquery": "@dev",
+		"kdyby/curl": "2.0.*"
 	}
 }

@@ -1,120 +1,70 @@
 <?php
 
 /**
- * AmiAmi grabber (version 1.0 released on 3.6.2013, http://www.konata.cz)
+ * AmiAmi grabber (version 2.0 released on 13.6.2014, http://www.konata.cz)
  *
- * Copyright (c) 2013 Václav Vrbka (aurielle@aurielle.cz)
- *
- * For the full copyright and license information, please view
- * the file license.md that was distributed with this source code.
+ * Copyright (c) 2014 Václav Vrbka (aurielle@aurielle.cz)
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
-Nette\Diagnostics\Debugger::enable(FALSE, __DIR__ . '/log');
+namespace Aurielle\AmiamiGrabber;
+use Nette;
 
-if (!file_exists($config = __DIR__ . '/config.php')) {
-	echo 'Config file is missing.' . PHP_EOL;
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/libs/Figure.php';
+Nette\Diagnostics\Debugger::enable(FALSE, __DIR__ . '/log');
+Nette\Utils\SafeStream::register();
+
+
+// Config loading
+$config = __DIR__ . '/config.php';
+if (!file_exists($config)) {
+	echo 'Config file is missing. Example config should be present, so go by instructions inside.' . PHP_EOL;
 	exit;
 }
 
 require_once $config;
 
+// Image dir check
 if (!is_dir($imgDir) || !is_writable($imgDir)) {
 	echo 'Specified image dir does not exist or is not writable.' . PHP_EOL;
 	exit;
 }
 
+
+// Get the file contents and begin parsing
 $c = file_get_contents($source);
 $urls = explode("\n", $c);
 $info = array();
 
 foreach ($urls as $url) {
+	// Parse figure URL
 	$query = parse_url(trim($url), PHP_URL_QUERY);
 	$parts = array();
 	parse_str($query, $parts);
 
 	// Invalid URL, skip
 	if (!isset($parts['gcode'])) {
+		echo 'Invalid URL found (no gcode parameter present): ' . $url . PHP_EOL;
 		continue;
 	}
 
-	// Find the ID
-	$figure = array();
-	$figure['id'] = $figId = $parts['gcode'];
+	// Let the magic do the rest
+	$fig = new Figure($parts['gcode']);
+	$fig->setTimeout($timeout);
+	$fig->setImgDir($imgDir);
+	$fig->setJpNameOrder($jpNameOrder);
+	$fig->setStripPreorders($stripPreorders);
 
-	// Fetch the pages
-	$urlcom = "http://www.amiami.com/top/detail/detail?gcode={$figId}&page=top";
-	$urljp = "http://www.amiami.jp/top/detail/detail?gcode={$figId}&page=top";
 	try {
-		$ch = new Kdyby\Curl\Request($urlcom);
-		$ch->setTimeout(60);
-		$response = $ch->send();
-		$dom = \phpQuery::newDocument($response->getResponse());
+		$info[] = $fig->getInfo();
 
-	} catch (\Exception $e) {
+	} catch (FigureException $e) {
 		Nette\Diagnostics\Debugger::log($e, Nette\Diagnostics\Debugger::ERROR);
-		echo "!!! Downloading details for figure '$figId' failed, skipping." . PHP_EOL;
+		echo '!!! ' . $e->getMessage();
 		continue;
 	}
 
-	// Begin parsing
-	$figure['image'] = pq('.product_img_area img')->attr('src');
-	$figure['image_basename'] = $filename = basename($figure['image']);
-	$figure['image_thumb'] = pathinfo($filename, PATHINFO_FILENAME) . '_thumb.' . pathinfo($filename, PATHINFO_EXTENSION);
-	try {
-		$fh = fopen('safe://' . $imgDir . '/' . $filename, 'wb');
-		$ch = new Kdyby\Curl\Request($figure['image']);
-		$ch->setTimeout(60);
-		$res = $ch->send();
-		fwrite($fh, $res->getResponse());
-		fclose($fh);
-
-		// thumb
-		$img = Nette\Image::fromString($res->getResponse());
-		$img->resize(150, 150, Nette\Image::EXACT);
-		$img->save($imgDir . '/' . $figure['image_thumb']);
-
-	} catch (\Exception $e) {
-		Nette\Diagnostics\Debugger::log($e, Nette\Diagnostics\Debugger::ERROR);
-		echo '!!! Error while downloading image ' . $filename . ' (' . get_class($e) . ': ' . $e->getMessage() . '), please download manually: ' . $figure['image'] . PHP_EOL . PHP_EOL;
-	}
-
-	$figure['name'] = trim(pq('#title h2')->text());
-	$figure['character'] = trim(pq('dl.spec_data')->find('dt:contains(Character Name)')->next('dd')->text());
-	if ($jpNameOrder) {
-		$orig = $figure['character'];
-		$figure['character'] = implode(' ', array_reverse(explode(' ', $orig, 2)));
-		$figure['name'] = str_replace($orig, $figure['character'], $figure['name']);
-	}
-
-	$figure['manufacturer'] = trim(pq('dl.spec_data')->find('dt:contains(Maker)')->next('dd')->text());
-	$figure['link'] = $urlcom;
-
-	$releasedate = trim(pq('dl.spec_data')->find('dt:contains(Release Date)')->next('dd')->text());
-	$releasedate = substr($releasedate, strpos($releasedate, ' '));
-	$figure['releasedate'] = date('Y/m', strtotime($releasedate));
-
-	// Now the prices from jp version
-	try {
-		$ch = new Kdyby\Curl\Request($urljp);
-		$ch->setTimeout(60);
-		$response = $ch->send();
-		$dom = \phpQuery::newDocument($response->getResponse());
-
-	} catch (\Exception $e) {
-		Nette\Diagnostics\Debugger::log($e, Nette\Diagnostics\Debugger::ERROR);
-		@unlink($imgDir . '/' . $figure['image_basename']);
-		@unlink($imgDir . '/' . $figure['image_thumb']);
-		echo "!!! Downloading prices for figure '$figId' failed, skipping and deleting images." . PHP_EOL;
-		continue;
-	}
-
-	$figure['price'] = (int) str_replace(',', '', trim(pq('ul > li.selling_price')->text()));
-	$internetprice = trim(pq('ul > li.price')->html());
-	$internetprice = Nette\Utils\Strings::replace($internetprice, '~<font class="off_price">[^>]+<\/font>~');
-	$figure['internetprice'] = (int) str_replace(',', '', $internetprice);
-
-	$info[] = (object) $figure;
+	// And wait
 	sleep(10);
 }
 

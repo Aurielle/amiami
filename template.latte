@@ -11,8 +11,8 @@
 				<p>
 					<strong>Postava:</strong> {$f->character}<br>
 					<strong>Výrobce:</strong> {$f->manufacturer}<br>
-					<strong>V prodeji:</strong> {$f->releasedate}<br>
-					<strong>Doporučená cena / cena na internetu:</strong> {$f->price} jenů / {$f->internetprice} jenů
+					<strong>V prodeji:</strong> {$f->releasedate|date:'Y/m'}<br>
+					<strong>Oficiální cena / cena na AmiAmi:</strong> {$f->price|number:0:',':' '} jenů / {$f->internetprice|number:0:',':' '} jenů
 				</p>
 				<p>
 					<a href="{$f->link}">AmiAmi link</a>
