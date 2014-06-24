@@ -1,7 +1,7 @@
 {
 	"name": "aurielle/amiami",
 	"description": "CLI tool for grabbing item information from amiami.com/amiami.jp and turning them into HTML tables. For Konata.cz.",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"homepage": "http://www.konata.cz",
 	"license": "BSD-3-Clause",
 	"authors": [
