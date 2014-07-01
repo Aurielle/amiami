@@ -35,7 +35,7 @@ $template = __DIR__ . '/template.latte';
 
 // Server image URL prefix, that means string that would be before image filename (typically URL to konata.cz)
 // Including the trailing slash
-$imagePrefix = 'http://www.konata.cz/wp-content/uploads/figurky/';
+$imagePrefix = 'http://www.konata.cz/wp-content/uploads/figurky2/';
 
 // Timeout - how long will the script wait to download each page or image, in seconds
 $timeout = 300;
