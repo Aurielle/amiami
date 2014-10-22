@@ -185,7 +185,9 @@ final class Figure extends Nette\Object
 		$this->info['image_thumb'] = pathinfo($this->info['image_basename'], PATHINFO_FILENAME) . '_thumb.' . pathinfo($this->info['image_basename'], PATHINFO_EXTENSION);
 
 		// Figure name and character
-		$this->info['name'] = trim(\pq('#title h2')->text());
+		//$this->info['name'] = trim(\pq('#title h2')->text());
+		$this->info['name'] = trim(\pq('title')->text());
+		$this->info['name'] = str_replace('AmiAmi [Character & Hobby Shop] | ', '', $this->info['name']);
 		if ($this->stripPreorders) {
 			$this->info['name'] = str_replace('(Preorder)', '', $this->info['name']);
 		}
